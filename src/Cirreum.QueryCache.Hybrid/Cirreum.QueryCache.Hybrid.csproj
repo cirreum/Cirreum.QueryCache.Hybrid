@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<Description>The Cirreum Hybrid caching implementation for Conductor Cacheable Queries.</Description>
@@ -6,8 +6,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Cirreum.Core" Version="1.0.41" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.2" />
+		<PackageReference Include="Cirreum.Core" Version="1.0.42" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
