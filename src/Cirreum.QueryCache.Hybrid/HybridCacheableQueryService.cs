@@ -15,6 +15,9 @@ sealed class HybridCacheableQueryService(
 		string[]? tags = null,
 		CancellationToken cancellationToken = default) {
 
+		// factoryExecuted is a per-invocation local — safe to capture in the async lambda.
+		// HybridCache's stampede protection means only one concurrent caller runs the factory,
+		// but each call to this method gets its own bool, so there is no shared-state issue.
 		var factoryExecuted = false;
 
 		var value = await hybridCache.GetOrCreateAsync(
@@ -27,7 +30,11 @@ sealed class HybridCacheableQueryService(
 			tags: tags,
 			cancellationToken: cancellationToken);
 
-		// Only update expiration if we just executed the factory and got a failure
+		// When the factory produces a failure result we immediately overwrite the entry with a
+		// shorter FailureExpiration. This causes two writes to the cache (GetOrCreateAsync stores
+		// the value first with normal expiration, then SetAsync overwrites it) — an inherent
+		// limitation of the HybridCache API since expiration cannot be determined before the
+		// factory runs. The brief window between the two writes is acceptable.
 		if (factoryExecuted &&
 			value is IResult { IsSuccess: false } &&
 			settings.FailureExpiration.HasValue) {
@@ -59,6 +66,8 @@ sealed class HybridCacheableQueryService(
 			? settings.FailureExpiration.Value
 			: settings.Expiration;
 
+		// FailureExpiration is intentionally applied to both L1 (local) and L2 (distributed) cache.
+		// If a separate failure TTL for L1 is ever needed, introduce a FailureLocalExpiration setting.
 		var localExpiration = useFailureExpiration && settings.FailureExpiration.HasValue
 			? settings.FailureExpiration.Value
 			: settings.LocalExpiration;
