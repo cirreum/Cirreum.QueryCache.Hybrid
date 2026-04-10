@@ -1,6 +1,6 @@
 ﻿namespace Cirreum.QueryCache.Hybrid.Extensions;
 
-using Cirreum.Conductor.Caching;
+using Cirreum.Caching;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 public static class ServiceCollectionExtensions {
 	/// <summary>
 	/// Registers the <see cref="HybridCacheableQueryService"/> as the implementation for
-	/// <see cref="ICacheableQueryService"/>, enabling caching support for <c>ICacheableQuery&lt;T&gt;</c> requests.
+	/// <see cref="ICacheService"/>, enabling caching support for <c>ICacheableQuery&lt;T&gt;</c> requests.
 	/// </summary>
 	/// <remarks>
 	/// This method requires <c>AddHybridCache()</c> to be called separately to configure the underlying
@@ -20,10 +20,10 @@ public static class ServiceCollectionExtensions {
 	/// <returns>The service collection for chaining.</returns>
 	public static IServiceCollection AddHybridQueryCaching(this IServiceCollection services) {
 		//
-		// Conductor Cacheable Query Service (HybridCache)
+		// Cache Service (HybridCache)
 		//
 		services
-			.TryAddSingleton<ICacheableQueryService, HybridCacheableQueryService>();
+			.TryAddSingleton<ICacheService, HybridCacheableQueryService>();
 		return services;
 	}
 }

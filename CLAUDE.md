@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a .NET 10.0 library package (`Cirreum.QueryCache.Hybrid`) that provides a hybrid caching implementation for the Cirreum Conductor framework's cacheable queries. The library bridges Microsoft's `HybridCache` service with Cirreum's `ICacheableQueryService` interface.
+This is a .NET 10.0 library package (`Cirreum.QueryCache.Hybrid`) that provides a hybrid caching implementation for the Cirreum Conductor framework's cacheable queries. The library bridges Microsoft's `HybridCache` service with Cirreum's `ICacheService` interface.
 
 ## Common Development Commands
 
@@ -34,13 +34,13 @@ dotnet build Cirreum.QueryCache.Hybrid.slnx --configuration Release
 ### Core Components
 
 1. **HybridCacheableQueryService** (`src/Cirreum.QueryCache.Hybrid/HybridCacheableQueryService.cs:7`)
-   - Main implementation of `ICacheableQueryService` using Microsoft's `HybridCache`
+   - Main implementation of `ICacheService` using Microsoft's `HybridCache`
    - Handles cache-or-create patterns with failure expiration logic
    - Supports cache invalidation by key and tags
 
 2. **ServiceCollectionExtensions** (`src/Cirreum.QueryCache.Hybrid/Extensions/ServiceCollectionExtensions.cs:21`)
    - Provides `AddHybridQueryCaching()` extension method for DI registration
-   - Registers `HybridCacheableQueryService` as singleton implementation of `ICacheableQueryService`
+   - Registers `HybridCacheableQueryService` as singleton implementation of `ICacheService`
 
 ### Key Dependencies
 - `Cirreum.Core` (v1.0.16) - Provides the Conductor framework interfaces
@@ -71,7 +71,7 @@ The project uses GitHub Actions for automated publishing to NuGet. The workflow 
 
 This library is designed to be used in conjunction with:
 1. `Microsoft.Extensions.Caching.Hybrid` for the underlying cache service
-2. `Cirreum.Conductor` framework for cacheable query patterns
+2. `Cirreum.Caching` framework for cacheable query patterns
 
 Typical registration:
 ```csharp

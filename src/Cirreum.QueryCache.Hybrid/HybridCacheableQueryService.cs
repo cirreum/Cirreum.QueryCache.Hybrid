@@ -1,17 +1,17 @@
 ﻿namespace Cirreum.QueryCache.Hybrid;
 
-using Cirreum.Conductor.Caching;
+using Cirreum.Caching;
 using Microsoft.Extensions.Caching.Hybrid;
 using System.Collections.Generic;
 
 sealed class HybridCacheableQueryService(
 	HybridCache hybridCache
-) : ICacheableQueryService {
+) : ICacheService {
 
 	public async ValueTask<TResponse> GetOrCreateAsync<TResponse>(
 		string cacheKey,
 		Func<CancellationToken, ValueTask<TResponse>> factory,
-		QueryCacheSettings settings,
+		CacheExpirationSettings settings,
 		string[]? tags = null,
 		CancellationToken cancellationToken = default) {
 
@@ -61,7 +61,7 @@ sealed class HybridCacheableQueryService(
 		return hybridCache.RemoveByTagAsync(tags, cancellationToken);
 	}
 
-	private static HybridCacheEntryOptions CreateOptions(QueryCacheSettings settings, bool useFailureExpiration = false) {
+	private static HybridCacheEntryOptions CreateOptions(CacheExpirationSettings settings, bool useFailureExpiration = false) {
 		var expiration = useFailureExpiration && settings.FailureExpiration.HasValue
 			? settings.FailureExpiration.Value
 			: settings.Expiration;

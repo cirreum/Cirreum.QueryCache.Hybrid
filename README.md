@@ -6,13 +6,13 @@
 [![License](https://img.shields.io/github/license/cirreum/Cirreum.QueryCache.Hybrid?style=flat-square&labelColor=1F1F1F&color=F2F2F2)](https://github.com/cirreum/Cirreum.QueryCache.Hybrid/blob/main/LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-10.0-003D8F?style=flat-square&labelColor=1F1F1F)](https://dotnet.microsoft.com/)
 
-**Hybrid caching implementation for Conductor Cacheable Queries**
+**Hybrid caching implementation for Cirreum's cache service**
 
 ## Overview
 
-**Cirreum.QueryCache.Hybrid** provides a hybrid caching implementation that bridges Microsoft's `HybridCache` service with Cirreum's Conductor framework for cacheable queries.
+**Cirreum.QueryCache.Hybrid** provides a hybrid caching implementation that bridges Microsoft's `HybridCache` service with Cirreum's caching framework.
 
-This library implements the `ICacheableQueryService` interface using Microsoft's new `HybridCache` infrastructure, enabling automatic caching of query results with support for both local and distributed cache layers, tag-based invalidation, and failure-specific expiration policies.
+This library implements the `ICacheService` interface using Microsoft's new `HybridCache` infrastructure, enabling automatic caching of query results with support for both local and distributed cache layers, tag-based invalidation, and failure-specific expiration policies.
 
 ## Features
 
@@ -45,12 +45,11 @@ services.AddHybridQueryCaching(); // This library's implementation
 ```csharp
 public record GetUserQuery(int UserId) : ICacheableQuery<User>
 {
-    public QueryCacheSettings CacheSettings => new()
-    {
-        Expiration = TimeSpan.FromMinutes(15),
-        LocalExpiration = TimeSpan.FromMinutes(5),
-        FailureExpiration = TimeSpan.FromMinutes(1)
-    };
+    public CacheExpirationSettings CacheExpiration => new(
+        Expiration: TimeSpan.FromMinutes(15),
+        LocalExpiration: TimeSpan.FromMinutes(5),
+        FailureExpiration: TimeSpan.FromMinutes(1)
+    );
     
     public string[] CacheTags => [$"user:{UserId}"];
 }
