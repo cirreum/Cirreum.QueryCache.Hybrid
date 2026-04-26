@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 public static class ServiceCollectionExtensions {
 	/// <summary>
 	/// Registers the <see cref="HybridCacheableQueryService"/> as the implementation for
-	/// <see cref="ICacheService"/>, enabling caching support for <c>ICacheableQuery&lt;T&gt;</c> requests.
+	/// <see cref="ICacheService"/>, enabling caching support for <c>ICacheableOperation&lt;T&gt;</c> requests.
 	/// </summary>
 	/// <remarks>
 	/// This method requires <c>AddHybridCache()</c> to be called separately to configure the underlying

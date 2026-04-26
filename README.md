@@ -43,7 +43,7 @@ services.AddHybridQueryCaching(); // This library's implementation
 ### Query Implementation
 
 ```csharp
-public record GetUserQuery(int UserId) : ICacheableQuery<User>
+public record GetUserQuery(int UserId) : ICacheableOperation<User>
 {
     public CacheExpirationSettings CacheExpiration => new(
         Expiration: TimeSpan.FromMinutes(15),
